@@ -10,16 +10,26 @@ export default {
                 indigo: {
                     50: '#f5f7ff',
                     100: '#ebf0fe',
-                    200: '#ccd9fd',
-                    300: '#adc2fc',
-                    400: '#7093f9',
-                    500: '#3265f6',
-                    600: '#2d5bdd',
-                    700: '#264cb9',
-                    800: '#1e3c94',
-                    900: '#193179',
+                    200: '#cedbff',
+                    300: '#a3bcff',
+                    400: '#6d94ff',
+                    500: '#406aff',
+                    600: '#2547ff',
+                    700: '#1c36cc',
+                    800: '#1a2e99',
+                    900: '#142273',
                     950: '#0f1d47',
                 },
+                emerald: {
+                    400: '#34d399',
+                },
+                neon: {
+                    cyan: '#00f3ff',
+                    purple: '#bc13fe',
+                    pink: '#ff006e',
+                    green: '#39ff14',
+                    yellow: '#ffee00'
+                }
             },
             fontFamily: {
                 sans: ['Inter', 'system-ui', 'sans-serif'],
@@ -27,11 +37,21 @@ export default {
             animation: {
                 'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                 'float': 'float 6s ease-in-out infinite',
+                'shimmer': 'shimmer 2s linear infinite',
+                'glow': 'glow 2s ease-in-out infinite alternate',
             },
             keyframes: {
                 float: {
                     '0%, 100%': { transform: 'translateY(0)' },
                     '50%': { transform: 'translateY(-20px)' },
+                },
+                shimmer: {
+                    '0%': { backgroundPosition: '-200% 0' },
+                    '100%': { backgroundPosition: '200% 0' },
+                },
+                glow: {
+                    'from': { textShadow: '0 0 10px #fff, 0 0 20px #fff, 0 0 30px #bc13fe, 0 0 40px #bc13fe' },
+                    'to': { textShadow: '0 0 20px #fff, 0 0 30px #ff006e, 0 0 40px #ff006e, 0 0 50px #ff006e' },
                 }
             },
             backgroundImage: {
