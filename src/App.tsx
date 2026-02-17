@@ -1,21 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import {
-  Zap, Check, Play, Users,
+  Check, Play, Users,
   MessageSquare, TrendingUp, Trophy, ArrowRight,
-  ShieldCheck, HelpCircle, ShoppingBag,
-  Scale, Smartphone, Laptop, Target, BarChart3,
-  DollarSign, Sparkles, AlertCircle, Camera, Video
+  ShieldCheck, ShoppingBag,
+  Scale, Smartphone, Laptop, Target,
+  Sparkles, Video
 } from 'lucide-react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 const App: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState(3600);
-  const [activeTab, setActiveTab] = useState<'shopee' | 'pro' | 'universal'>('universal');
 
   // PROFIT CALCULATOR STATE
   const [views, setViews] = useState(500000); // 500k views
   const [conversion, setConversion] = useState(0.5); // 0.5% conversion
-  const [ticket, setTicket] = useState(47); // R$ 47 ticket
+  const ticket = 47; // R$ 47 ticket (fixed)
 
   const potentialEarnings = (views * (conversion / 100) * ticket);
 
@@ -84,8 +83,8 @@ const App: React.FC = () => {
 
             {/* HERO VIDEO / MOCKUP */}
             <motion.div
-              initial={{ size: 0.8, opacity: 0 }}
-              animate={{ size: 1, opacity: 1 }}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
               transition={{ delay: 0.2 }}
               className="relative aspect-video max-w-5xl mx-auto overflow-hidden rounded-[2rem] md:rounded-[3rem] border border-white/10 group cursor-pointer shadow-2xl"
             >
@@ -112,7 +111,7 @@ const App: React.FC = () => {
         <section className="py-20 bg-white/5 border-y border-white/5 relative overflow-hidden">
           <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
             <div className="space-y-8">
-              <h2 className="text-4xl md:text-6xl font-black italic uppercase italic leading-none">
+              <h2 className="text-4xl md:text-6xl font-black italic uppercase leading-none">
                 Vej quanto você <br /> <span className="text-neon-green">pode lucrar</span>
               </h2>
               <p className="text-gray-400 text-lg font-bold uppercase tracking-tight italic">
@@ -178,7 +177,7 @@ const App: React.FC = () => {
                 <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
                   {item.icon}
                 </div>
-                <h4 className="text-xl font-black uppercase italic italic mb-4">{item.title}</h4>
+                <h4 className="text-xl font-black uppercase italic mb-4">{item.title}</h4>
                 <p className="text-gray-500 font-bold uppercase text-[11px] leading-relaxed">{item.desc}</p>
               </div>
             ))}
@@ -217,7 +216,7 @@ const App: React.FC = () => {
           <div className="max-w-7xl mx-auto px-6 text-center space-y-20">
             <div className="space-y-8">
               <span className="text-neon-yellow font-black uppercase text-sm tracking-[0.5em] italic">O Arsenal Completo</span>
-              <h2 className="text-4xl md:text-8xl font-black italic uppercase leading-none italic">
+              <h2 className="text-4xl md:text-8xl font-black italic uppercase leading-none">
                 O QUE VOCÊ VAI <br /> <span className="text-glow-cyan text-white">RECEBER</span>
               </h2>
             </div>
@@ -310,7 +309,7 @@ const App: React.FC = () => {
             <ShieldCheck className="w-full h-full text-neon-cyan relative z-10 group-hover:text-neon-pink transition-colors" />
           </div>
           <div className="max-w-3xl mx-auto px-6 space-y-6">
-            <h2 className="text-3xl md:text-6xl font-black italic uppercase tracking-tighter italic">RISCO <span className="text-neon-cyan">ZERO</span> PARA VOCÊ</h2>
+            <h2 className="text-3xl md:text-6xl font-black italic uppercase tracking-tighter">RISCO <span className="text-neon-cyan">ZERO</span> PARA VOCÊ</h2>
             <p className="text-gray-400 text-lg md:text-xl leading-relaxed uppercase font-bold tracking-tight italic">
               Teste o ViraExpress por 7 dias inteiros. <br />
               Se você não criar seus primeiros personagens virais ou se arrepender por QUALQUER motivo, devolvemos 100% do seu dinheiro. Sem perguntas.
@@ -330,7 +329,7 @@ const App: React.FC = () => {
               </div>
             </div>
             <div className="space-y-8">
-              <h2 className="text-4xl md:text-6xl font-black italic uppercase leading-none italic">QUEM É <br /> <span className="text-neon-cyan">VIRA EXPRESS?</span></h2>
+              <h2 className="text-4xl md:text-6xl font-black italic uppercase leading-none">QUEM É <br /> <span className="text-neon-cyan">VIRA EXPRESS?</span></h2>
               <p className="text-gray-400 font-bold uppercase italic leading-relaxed">
                 Somos uma equipe especializada em engenharia de IA e marketing viral. Já ajudamos mais de 5.000 alunos a criarem conteúdo que realmente converte em lucro, sem precisar aparecer. <br /><br />
                 Nossa missão é democratizar a alta produção audiovisual, entregando em 60 segundos o que um editor cobraria R$ 200,00 por vídeo.
