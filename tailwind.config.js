@@ -23,22 +23,29 @@ export default {
                 emerald: {
                     400: '#34d399',
                 },
-                neon: {
-                    cyan: '#00f3ff',
-                    purple: '#bc13fe',
-                    pink: '#ff006e',
-                    green: '#39ff14',
-                    yellow: '#ffee00'
-                }
+                // MASCOT THEME
+                'mascot-yellow': '#FFD700',
+                'mascot-orange': '#FF8C00',
+                'mascot-blue': '#007BFF',
+                'mascot-purple': '#9B51E0',
+                'mascot-pink': '#FF006E',
+                'mascot-green': '#00C853',
             },
             fontFamily: {
-                sans: ['Inter', 'system-ui', 'sans-serif'],
+                sans: ['Nunito', 'Inter', 'system-ui', 'sans-serif'], // Check if Nunito is available or needs import
+            },
+            boxShadow: {
+                'pop': '4px 4px 0px 0px rgba(0,0,0,1)',
+                'pop-sm': '2px 2px 0px 0px rgba(0,0,0,1)',
+                'pop-lg': '8px 8px 0px 0px rgba(0,0,0,1)',
             },
             animation: {
                 'pulse-slow': 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
                 'float': 'float 6s ease-in-out infinite',
                 'shimmer': 'shimmer 2s linear infinite',
                 'glow': 'glow 2s ease-in-out infinite alternate',
+                'bounce-slow': 'bounce 3s infinite',
+                'wiggle': 'wiggle 1s ease-in-out infinite',
             },
             keyframes: {
                 float: {
@@ -52,7 +59,11 @@ export default {
                 glow: {
                     'from': { textShadow: '0 0 10px #fff, 0 0 20px #fff, 0 0 30px #bc13fe, 0 0 40px #bc13fe' },
                     'to': { textShadow: '0 0 20px #fff, 0 0 30px #ff006e, 0 0 40px #ff006e, 0 0 50px #ff006e' },
-                }
+                },
+                wiggle: {
+                    '0%, 100%': { transform: 'rotate(-3deg)' },
+                    '50%': { transform: 'rotate(3deg)' },
+                },
             },
             backgroundImage: {
                 'glass-gradient': 'linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05))',

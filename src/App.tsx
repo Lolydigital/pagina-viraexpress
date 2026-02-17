@@ -1,354 +1,333 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
   Check, Play, Users,
-  ArrowRight,
-  ShieldCheck, ShoppingBag,
-  Laptop, Target,
-  Sparkles, Video
+  ArrowRight, ShieldCheck,
+  Target, Sparkles, Video,
+  Zap, DollarSign, Brain, Smartphone,
+  Clock, Rocket, MessageCircle, Star,
+  HelpCircle, Copy, Gift
 } from 'lucide-react';
 import { motion } from 'framer-motion';
 
-const App: React.FC = () => {
-  const [timeLeft, setTimeLeft] = useState(3600);
-
-  // PROFIT CALCULATOR STATE
-  const [views, setViews] = useState(500000); // 500k views
-  const [conversion, setConversion] = useState(0.5); // 0.5% conversion
-  const ticket = 47; // R$ 47 ticket (fixed)
-
-  const potentialEarnings = (views * (conversion / 100) * ticket);
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => (prev > 0 ? prev - 1 : 0));
-    }, 1000);
-    return () => clearInterval(timer);
-  }, []);
-
-  const formatTime = (seconds: number) => {
-    const m = Math.floor((seconds % 3600) / 60);
-    const s = seconds % 60;
-    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+// --- MASCOT COMPONENT ---
+// A reusable component for the mascot to "break the fourth wall".
+// Using a placeholder styling that implies a character until user replaces image.
+const Mascot: React.FC<{
+  pose?: 'happy' | 'thinking' | 'pointing' | 'cool' | 'shocked';
+  className?: string;
+  speech?: string;
+}> = ({ pose = 'happy', className = '', speech }) => {
+  // Placeholder colors/icons based on pose
+  const getMascotContent = () => {
+    switch (pose) {
+      case 'cool': return <div className="text-6xl">😎</div>; // Placeholder for Cool Carrot
+      case 'shocked': return <div className="text-6xl">😱</div>;
+      case 'thinking': return <div className="text-6xl">🤔</div>;
+      case 'pointing': return <div className="text-6xl">👉</div>;
+      default: return <div className="text-6xl">🥕</div>; // Base character
+    }
   };
 
   return (
-    <div className="min-h-screen bg-[#020617] text-white selection:bg-neon-cyan/30 selection:text-neon-cyan overflow-x-hidden font-sans bg-grid">
-
-      {/* 1. FLOATING PROFIT BAR */}
-      <div className="bg-gradient-to-r from-neon-pink via-neon-purple to-indigo-600 py-3 px-4 text-center text-[11px] md:text-sm font-black uppercase tracking-[0.2em] sticky top-0 z-[100] shadow-[0_0_30px_rgba(255,0,110,0.4)]">
-        ⚡ ÚLTIMO DIA: OFERTA LIBERADA POR R$ 47,00 ACABA EM <span className="underline decoration-2 underline-offset-4 decoration-white">{formatTime(timeLeft)}</span>
+    <div className={`relative flex flex-col items-center ${className}`}>
+      {speech && (
+        <div className="bg-white text-black text-xs md:text-sm font-black uppercase p-3 rounded-2xl border-2 border-black shadow-pop mb-2 relative max-w-[200px] text-center animate-bounce-slow">
+          {speech}
+          <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-4 h-4 bg-white border-b-2 border-r-2 border-black rotate-45 transform"></div>
+        </div>
+      )}
+      <div className="w-24 h-24 md:w-32 md:h-32 bg-mascot-orange rounded-full border-4 border-black shadow-pop flex items-center justify-center animate-wiggle transform hover:scale-110 transition-transform cursor-pointer">
+        {getMascotContent()}
       </div>
+    </div>
+  );
+};
 
-      <main>
-        {/* 2. HERO SECTION */}
-        <section className="relative pt-20 pb-20 md:pt-32 md:pb-40 px-6">
-          <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-neon-cyan/10 blur-[150px] rounded-full -z-10"></div>
+const App: React.FC = () => {
+  const [activeFaq, setActiveFaq] = useState<number | null>(null);
 
-          <div className="max-w-6xl mx-auto text-center space-y-8 md:space-y-12">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="space-y-6"
-            >
-              <div className="inline-flex items-center gap-2 px-4 py-2 bg-neon-cyan/10 border border-neon-cyan/20 rounded-full text-[10px] md:text-xs font-black uppercase tracking-widest text-neon-cyan animate-pulse">
-                <Target className="w-4 h-4" /> Método Viral 2026
-              </div>
+  return (
+    <div className="min-h-screen bg-[#FAFAFA] text-black font-sans selection:bg-mascot-yellow selection:text-black overflow-x-hidden">
 
-              <h1 className="text-4xl md:text-8xl font-black italic tracking-tighter leading-none uppercase">
-                FATURA MAIS DE <span className="text-neon-green text-glow">R$ 1.000</span> <br />
-                <span className="gradient-text-viral">POR SEMANA</span> COM <br />
-                <span className="relative">
-                  OBJETOS FALANTES
-                  <span className="absolute -bottom-2 md:-bottom-4 left-0 w-full h-2 md:h-4 bg-neon-pink/30 -skew-x-12 -z-10"></span>
-                </span>
-              </h1>
+      {/* 1. HERO SECTION */}
+      <section className="relative pt-12 pb-20 md:pt-24 md:pb-32 px-4 overflow-hidden bg-mascot-yellow border-b-4 border-black">
+        {/* Background Patterns */}
+        <div className="absolute inset-0 opacity-10 bg-[radial-gradient(#000_1px,transparent_1px)] [background-size:20px_20px]"></div>
 
-              <p className="max-w-3xl mx-auto text-gray-400 text-sm md:text-xl font-bold uppercase tracking-tighter leading-tight">
-                A ferramenta de IA que cria "personagens irrecusáveis" em 60 segundos <br className="hidden md:block" />
-                e <span className="text-white">destrava o algoritmo</span> do TikTok e Instagram.
-              </p>
-
-              <div className="flex flex-col md:flex-row items-center justify-center gap-6 pt-4">
-                <button className="w-full md:w-auto bg-neon-green hover:bg-neon-green/90 text-black px-12 py-6 rounded-2xl text-lg md:text-xl font-black uppercase tracking-wider transition-all shadow-[0_0_40px_rgba(57,255,20,0.3)] active:scale-95 flex items-center justify-center gap-4">
-                  QUERO MEU ACESSO <ArrowRight className="w-6 h-6" />
-                </button>
-                <div className="flex -space-x-4">
-                  {[1, 2, 3, 4].map(i => (
-                    <img key={i} src={`https://i.pravatar.cc/100?u=${i}`} className="w-10 h-10 rounded-full border-2 border-[#020617]" alt="User" />
-                  ))}
-                  <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center text-[10px] font-bold border-2 border-[#020617]">+1k</div>
-                </div>
-              </div>
-            </motion.div>
-
-            {/* HERO VIDEO / MOCKUP */}
-            <motion.div
-              initial={{ scale: 0.8, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              transition={{ delay: 0.2 }}
-              className="relative aspect-video max-w-5xl mx-auto overflow-hidden rounded-[2rem] md:rounded-[3rem] border border-white/10 group cursor-pointer shadow-2xl"
-            >
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent z-10"></div>
-              <img
-                src="https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=1200"
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700 opacity-60"
-                alt="Objeto Viral"
-              />
-              <div className="absolute inset-0 flex items-center justify-center z-20">
-                <div className="w-20 h-20 md:w-28 md:h-28 bg-neon-cyan backdrop-blur-xl rounded-full flex items-center justify-center shadow-[0_0_50px_rgba(0,243,255,0.5)] group-hover:scale-110 transition-all">
-                  <Play className="w-10 h-10 md:w-14 md:h-14 fill-black text-black ml-2" />
-                </div>
-              </div>
-              <div className="absolute bottom-6 md:bottom-12 left-6 md:left-12 z-20 text-left">
-                <p className="text-neon-cyan font-black uppercase tracking-widest text-[10px] md:text-xs italic mb-2">Aperte o Play</p>
-                <h3 className="text-xl md:text-3xl font-black italic uppercase leading-none">Veja a Magia do <br /> Objeto Falante</h3>
-              </div>
-            </motion.div>
-          </div>
-        </section>
-
-        {/* 3. PROFIT SIMULATOR (HIGH CONVERSION) */}
-        <section className="py-20 bg-white/5 border-y border-white/5 relative overflow-hidden">
-          <div className="max-w-6xl mx-auto px-6 grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
-            <div className="space-y-8">
-              <h2 className="text-4xl md:text-6xl font-black italic uppercase leading-none">
-                Vej quanto você <br /> <span className="text-neon-green">pode lucrar</span>
-              </h2>
-              <p className="text-gray-400 text-lg font-bold uppercase tracking-tight italic">
-                Simule seus ganhos baseados em visualizações virais
-              </p>
-
-              <div className="space-y-10">
-                <div className="space-y-4">
-                  <div className="flex justify-between font-black uppercase text-xs tracking-widest">
-                    <span>Visualizações Mensais</span>
-                    <span className="text-neon-cyan">{views.toLocaleString()}</span>
-                  </div>
-                  <input
-                    type="range" min="10000" max="5000000" step="50000" value={views}
-                    onChange={(e) => setViews(Number(e.target.value))}
-                    className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-neon-cyan"
-                  />
-                </div>
-
-                <div className="space-y-4">
-                  <div className="flex justify-between font-black uppercase text-xs tracking-widest">
-                    <span>Taxa de Conversão</span>
-                    <span className="text-neon-pink">{conversion}%</span>
-                  </div>
-                  <input
-                    type="range" min="0.1" max="2" step="0.1" value={conversion}
-                    onChange={(e) => setConversion(Number(e.target.value))}
-                    className="w-full h-2 bg-white/10 rounded-lg appearance-none cursor-pointer accent-neon-pink"
-                  />
-                </div>
-              </div>
+        <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center relative z-10">
+          <div className="space-y-8 order-2 md:order-1 text-center md:text-left">
+            <div className="inline-block bg-black text-mascot-yellow px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest transform -rotate-2">
+              🚀 Método V.O.Z. 2026
             </div>
+            <h1 className="text-4xl md:text-6xl font-black leading-tight uppercase transform">
+              Crie <span className="text-mascot-blue underline decoration-wavy decoration-black">Vídeos Virais</span> de Objetos Falantes em Minutos e <br />
+              <span className="bg-black text-white px-2">Fature R$ 17 Mil</span>
+            </h1>
+            <p className="text-lg md:text-xl font-bold text-gray-800 leading-relaxed border-l-4 border-black pl-4">
+              A <span className="underline decoration-mascot-pink decoration-4">ÚNICA ferramenta</span> que entrega o <strong>ROTEIRO + IMAGENS + PROMPT</strong> prontos, estilo Pixar, baseado no que está viralizando AGORA.
+            </p>
 
-            <div className="glass-card p-10 md:p-16 rounded-[3rem] text-center space-y-8 border-neon-cyan/10 bg-neon-cyan/5">
-              <p className="text-xs font-black uppercase tracking-widest text-gray-400">Lucro Potencial Estimado</p>
-              <h3 className="text-6xl md:text-8xl font-black italic text-glow tracking-tighter">
-                R$ {potentialEarnings.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
-              </h3>
-              <p className="text-[10px] font-black uppercase text-neon-green animate-pulse">Baseado em ticket médio de R$ 47,00</p>
-              <button className="w-full bg-white text-black py-6 rounded-2xl font-black uppercase text-sm tracking-widest transition-all hover:bg-neon-cyan">
-                Quero Lucre Isso Agora
+            <div className="flex flex-col gap-4">
+              <button className="w-full md:w-auto bg-mascot-green text-white border-4 border-black shadow-pop-lg px-8 py-5 rounded-2xl text-xl font-black uppercase tracking-wider hover:translate-x-1 hover:translate-y-1 hover:shadow-pop transition-all flex items-center justify-center gap-3">
+                <Play className="fill-current w-6 h-6" /> Quero Criar Agora
               </button>
+              <p className="text-xs font-extrabold uppercase tracking-widest text-gray-600 flex items-center justify-center md:justify-start gap-2">
+                <Rocket className="w-4 h-4 text-mascot-orange" /> +500 criadores já estão usando
+              </p>
             </div>
           </div>
-        </section>
 
-        {/* 4. O QUE UM OBJETO PODE FAZER (GRID) */}
-        <section className="py-20 md:py-40 max-w-7xl mx-auto px-6 space-y-20">
-          <h2 className="text-center text-4xl md:text-7xl font-black italic uppercase leading-none">
-            O Objeto é o Seu <br /> <span className="gradient-text-viral">Vendedor 24h</span>
+          <div className="order-1 md:order-2 flex justify-center relative">
+            <div className="absolute -top-10 -right-10 w-20 h-20 bg-mascot-blue rounded-full border-4 border-black flex items-center justify-center font-black text-white text-xl animate-bounce transform rotate-12 z-20">
+              WOW!
+            </div>
+            <Mascot pose="pointing" className="scale-150" speech="Eu faço todo o trabalho chato por você!" />
+          </div>
+        </div>
+      </section>
+
+      {/* 2. QUEBRA DE OBJEÇÕES (GRID) */}
+      <section className="py-20 px-4 max-w-7xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            { icon: <Video className="w-8 h-8" />, title: "Não Precisa Aparecer", desc: "O objeto é a estrela. Você lucra no anonimato.", bg: "bg-blue-100" },
+            { icon: <DollarSign className="w-8 h-8" />, title: "Zero Investimento", desc: "Comece com o plano gratuito. Sem custo inicial.", bg: "bg-green-100" },
+            { icon: <Brain className="w-8 h-8" />, title: "Sem Saber IA", desc: "É só clicar. A ferramenta pensa por você.", bg: "bg-purple-100" },
+            { icon: <Smartphone className="w-8 h-8" />, title: "Só Celular", desc: "Esqueça PC Gamer. Faz tudo na palma da mão.", bg: "bg-yellow-100" },
+            { icon: <Target className="w-8 h-8" />, title: "Sem Seguidores", desc: "Viraliza pelo algoritmo, não pela sua fama.", bg: "bg-red-100" },
+            { icon: <Clock className="w-8 h-8" />, title: "Vídeos em 10 min", desc: "Roteiro, imagem e prompt gerados na hora.", bg: "bg-indigo-100" },
+            { icon: <Rocket className="w-8 h-8" />, title: "Perfil do Zero", desc: "Faturei R$ 2k com conta criada ontem.", bg: "bg-orange-100" },
+            { icon: <Check className="w-8 h-8" />, title: "Método Testado", desc: "O mesmo que eu uso pra fazer R$ 17 mil/mês.", bg: "bg-teal-100" },
+            { icon: <Zap className="w-8 h-8" />, title: "FERRAMENTA FAZ", desc: "Outros ensinam. Nós FAZEMOS o trabalho.", bg: "bg-mascot-yellow border-4 border-black shadow-pop" }
+          ].map((item, i) => (
+            <div key={i} className={`${item.bg} p-6 rounded-3xl border-2 border-black/10 flex flex-col gap-4 relative group hover:-translate-y-1 transition-transform`}>
+              <div className="w-12 h-12 bg-white rounded-full border-2 border-black flex items-center justify-center shadow-pop-sm">
+                {item.icon}
+              </div>
+              <div>
+                <h3 className="font-black uppercase text-lg mb-1">{item.title}</h3>
+                <p className="text-sm font-bold text-gray-600 leading-tight">{item.desc}</p>
+              </div>
+              {i === 8 && <Mascot pose="cool" className="absolute -top-10 -right-4 scale-50" />}
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 3. PROVA SOCIAL */}
+      <section className="py-20 bg-black text-white px-4 border-y-4 border-mascot-blue relative overflow-hidden">
+        <Mascot pose="happy" className="absolute top-10 right-10 opacity-20 rotate-12 scale-150 grayscale" />
+        <div className="max-w-5xl mx-auto text-center space-y-12 relative z-10">
+          <h2 className="text-3xl md:text-5xl font-black uppercase leading-tight">
+            Veja Quanto Você Pode <span className="text-mascot-green">Ganhar</span>
           </h2>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[
-              { title: 'Seu Perfil de IA', desc: 'Crie autoridade sem expor seu rosto real.', icon: <Users className="text-neon-cyan" /> },
-              { title: 'Seu Canal Dark', desc: 'Produza 10 vídeos por dia com facilidade total.', icon: <Video className="text-neon-pink" /> },
-              { title: 'Seu Produto Shopee', desc: 'Dê voz aos seus achadinhos e multiplique cliques.', icon: <ShoppingBag className="text-neon-green" /> },
-              { title: 'Sua Loja Dropshipping', desc: 'Personagens Pixar que fazem o "unboxing" por você.', icon: <Laptop className="text-neon-yellow" /> },
-              { title: 'Seu Serviço Local', desc: 'Atraia clientes para sua clínica ou escritório.', icon: <Target className="text-neon-purple" /> },
-              { title: 'Seu Negócio Viral', desc: 'Domine a aba Explore com criativos absurdos.', icon: <Sparkles className="text-white" /> }
-            ].map((item, i) => (
-              <div key={i} className="glass-card p-10 rounded-[2.5rem] border-white/5 hover:border-neon-cyan/20 transition-all group">
-                <div className="w-16 h-16 bg-white/5 rounded-2xl flex items-center justify-center mb-6 group-hover:scale-110 transition-transform">
-                  {item.icon}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            <div className="bg-gray-900 p-6 rounded-3xl border border-gray-800">
+              <div className="flex justify-between items-center mb-6">
+                <span className="text-gray-400 font-bold uppercase text-xs">Resultados Instagram</span>
+                <Smartphone className="text-pink-500 w-5 h-5" />
+              </div>
+              <div className="text-left space-y-4">
+                <div>
+                  <p className="text-4xl font-black text-white">R$ 2.266,65</p>
+                  <p className="text-xs text-green-400 font-bold uppercase">Em vendas no Link da Bio</p>
                 </div>
-                <h4 className="text-xl font-black uppercase italic mb-4">{item.title}</h4>
-                <p className="text-gray-500 font-bold uppercase text-[11px] leading-relaxed">{item.desc}</p>
+                <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                  <div className="h-full w-[80%] bg-gradient-to-r from-purple-500 to-pink-500"></div>
+                </div>
+                <div className="grid grid-cols-2 gap-4 text-xs font-bold text-gray-400">
+                  <div>👁️ 24.1s Retenção</div>
+                  <div>👥 +4.354 Seguidores</div>
+                </div>
+              </div>
+            </div>
+
+            <div className="bg-gray-900 p-6 rounded-3xl border border-gray-800">
+              <div className="flex justify-between items-center mb-6">
+                <span className="text-gray-400 font-bold uppercase text-xs">Monetização TikTok</span>
+                <Video className="text-cyan-400 w-5 h-5" />
+              </div>
+              <div className="text-left space-y-4">
+                <div>
+                  <p className="text-4xl font-black text-white">$ 96,00 USD</p>
+                  <p className="text-xs text-green-400 font-bold uppercase">Aprox. R$ 540,00 com UM vídeo</p>
+                </div>
+                <div className="h-2 bg-gray-800 rounded-full overflow-hidden">
+                  <div className="h-full w-[60%] bg-cyan-400"></div>
+                </div>
+                <div className="grid grid-cols-2 gap-4 text-xs font-bold text-gray-400">
+                  <div>🎥 Vídeo de 45s</div>
+                  <div>📈 10.24% Assistiram tudo</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className="inline-block bg-mascot-blue text-white px-8 py-3 rounded-full font-black uppercase text-sm border-2 border-white shadow-[0_0_20px_rgba(0,123,255,0.5)] animate-pulse">
+            Te ensino o passo a passo exato disso!
+          </div>
+        </div>
+      </section>
+
+      {/* 4. O QUE VOCÊ VAI RECEBER (BENEFÍCIOS) */}
+      <section className="py-20 px-4 max-w-4xl mx-auto space-y-12">
+        <div className="text-center space-y-4">
+          <h2 className="text-3xl md:text-5xl font-black uppercase bg-mascot-yellow inline-block px-4 py-1 transform -rotate-1 border-2 border-black shadow-pop">
+            O Que Você Recebe
+          </h2>
+        </div>
+
+        <div className="space-y-6">
+          {[
+            { title: "Acesso à Vira Express", desc: "IA Automática: Roteiro + Imagens Pixar + Prompt Veo 3." },
+            { title: "Templates Virais Prontos", desc: "Copie e cole estruturas que já têm milhões de views." },
+            { title: "Estratégia TikTok & Reels", desc: "O segredo para destravar o algoritmo em 2026." },
+            { title: "Tática de Vendas", desc: "Como vender no vídeo sem parecer chato." },
+            { title: "Acesso Vitalício", desc: "Pague uma vez, use para sempre. Atualizações grátis." }
+          ].map((benefit, i) => (
+            <div key={i} className="flex items-center gap-4 bg-white p-4 rounded-2xl border-2 border-gray-100 hover:border-black transition-colors">
+              <div className="bg-mascot-green text-white p-2 rounded-full border-2 border-black shadow-pop-sm">
+                <Check className="w-5 h-5" />
+              </div>
+              <div>
+                <h4 className="font-black uppercase text-lg">{benefit.title}</h4>
+                <p className="text-sm font-bold text-gray-500">{benefit.desc}</p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
+      {/* 5. BÔNUS EXCLUSIVOS */}
+      <section className="py-20 bg-mascot-blue px-4 border-y-4 border-black">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-16 relative">
+            <Mascot pose="shocked" className="absolute -top-16 left-1/2 -translate-x-1/2 z-10" speech="ISSO TUDO É DE GRAÇA?!" />
+            <h2 className="text-3xl md:text-5xl font-black uppercase text-white drop-shadow-[4px_4px_0_rgba(0,0,0,1)] pt-8">
+              Bônus <span className="text-mascot-yellow">Exclusivos</span>
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { icon: "🔮", title: "Segredo Viral™", color: "bg-purple-500" },
+              { icon: "💰", title: "Guia Lucrativo", color: "bg-green-500" },
+              { icon: "♾️", title: "Ideias Infinitas IA", color: "bg-indigo-500" },
+              { icon: "🧲", title: "Roteiro Magnético", color: "bg-orange-500" },
+              { icon: "🤖", title: "Cria Vídeo Sozinho", color: "bg-pink-500" },
+              { icon: "🕵️", title: "Edição Invisível", color: "bg-gray-800" },
+            ].map((bonus, i) => (
+              <div key={i} className={`${bonus.color} text-white p-6 rounded-3xl border-4 border-black shadow-pop hover:-translate-y-2 transition-transform`}>
+                <div className="text-4xl mb-4">{bonus.icon}</div>
+                <h3 className="text-xl font-black uppercase leading-none mb-2">{bonus.title}</h3>
+                <span className="bg-white text-black px-2 py-1 text-[10px] font-black uppercase rounded">Valor: R$ 97 (Grátis)</span>
               </div>
             ))}
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* 5. SHOWCASE: EXAMPLES */}
-        <section className="py-32 bg-white/2 overflow-hidden">
-          <div className="max-w-7xl mx-auto px-6 space-y-16">
-            <div className="flex flex-col md:flex-row justify-between items-end gap-10">
-              <div className="space-y-4">
-                <h2 className="text-4xl md:text-6xl font-black italic uppercase tracking-tighter">Personagens que <span className="text-neon-pink">Viciam</span></h2>
-                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs">Exemplos reais feitos com nossa ferramenta</p>
-              </div>
-            </div>
+      {/* 6. COMO FUNCIONA */}
+      <section className="py-20 px-4 max-w-5xl mx-auto text-center space-y-12">
+        <h2 className="text-3xl md:text-5xl font-black uppercase leading-tight">
+          Crie em menos de <br /> <span className="bg-mascot-orange px-2 text-white transform -rotate-2 inline-block">3 Minutos</span>
+        </h2>
 
-            <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {[
-                { img: 'https://images.unsplash.com/photo-1542291026-7eec264c2741?w=600', label: 'Tênis Falante' },
-                { img: 'https://images.unsplash.com/photo-1589829545856-d10d557cf95f?w=600', label: 'Livro Jurídico' },
-                { img: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=600', label: 'Game Boy Retro' },
-                { img: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=600', label: 'Abstrato Viral' }
-              ].map((item, i) => (
-                <div key={i} className="relative group rounded-3xl overflow-hidden aspect-[4/5] border border-white/10">
-                  <img src={item.img} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
-                  <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-100 group-hover:opacity-0 transition-opacity"></div>
-                  <div className="absolute bottom-6 left-6 font-black uppercase tracking-widest text-xs italic">{item.label}</div>
-                </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          <div className="bg-white p-8 rounded-[2rem] border-4 border-gray-100 flex flex-col items-center gap-4">
+            <div className="text-6xl font-black text-gray-200">1</div>
+            <h3 className="text-2xl font-black uppercase">Escolha</h3>
+            <p className="text-sm font-bold text-gray-500">Selecione o nicho e o objeto (cebola, celular...). Baseado em virais reais.</p>
+          </div>
+          <div className="bg-mascot-yellow p-8 rounded-[2rem] border-4 border-black shadow-pop flex flex-col items-center gap-4 transform md:-translate-y-4">
+            <div className="text-6xl font-black text-black/20">2</div>
+            <h3 className="text-2xl font-black uppercase">Gere</h3>
+            <p className="text-sm font-bold">A ferramenta cria Roteiro + Imagens Pixar + Prompt de Vídeo. Tudo automático.</p>
+          </div>
+          <div className="bg-white p-8 rounded-[2rem] border-4 border-gray-100 flex flex-col items-center gap-4">
+            <div className="text-6xl font-black text-gray-200">3</div>
+            <h3 className="text-2xl font-black uppercase">Publique</h3>
+            <p className="text-sm font-bold text-gray-500">Gere o vídeo no Veo/Luma, junte no CapCut e poste. Repita e lucre.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* 8. PREÇO E GARANTIA (BLOCK 7+8 combined style) */}
+      <section id="pricing" className="py-20 bg-mascot-purple px-4 border-t-4 border-black text-center">
+        <div className="max-w-xl mx-auto bg-white rounded-[3rem] border-4 border-black shadow-pop-lg p-8 md:p-12 relative">
+          <div className="absolute -top-6 left-1/2 -translate-x-1/2 bg-mascot-pink text-white px-6 py-2 rounded-full font-black uppercase border-2 border-black shadow-pop-sm whitespace-nowrap">
+            +7 Produtos em 1
+          </div>
+
+          <div className="space-y-6 mb-8 mt-4">
+            <div className="flex justify-center flex-wrap gap-2">
+              {['Curso Completo', 'Ferramenta IA', '6 Bônus Exclusivos'].map(tag => (
+                <span key={tag} className="bg-gray-100 px-3 py-1 rounded-full text-xs font-bold uppercase text-gray-600">{tag}</span>
               ))}
             </div>
-          </div>
-        </section>
 
-        {/* 6. WHAT YOU GET (REVEAL) */}
-        <section className="py-20 md:py-40">
-          <div className="max-w-7xl mx-auto px-6 text-center space-y-20">
-            <div className="space-y-8">
-              <span className="text-neon-yellow font-black uppercase text-sm tracking-[0.5em] italic">O Arsenal Completo</span>
-              <h2 className="text-4xl md:text-8xl font-black italic uppercase leading-none">
-                O QUE VOCÊ VAI <br /> <span className="text-glow-cyan text-white">RECEBER</span>
-              </h2>
-            </div>
-
-            <div className="relative glass-card p-4 rounded-[3.5rem] md:rounded-[5rem] overflow-hidden border-neon-cyan/20">
-              <img
-                src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200"
-                className="w-full rounded-[3rem] md:rounded-[4.5rem] opacity-40"
-                alt="Member Area"
-              />
-              <div className="absolute inset-0 flex flex-col items-center justify-center p-6 md:p-20 space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 w-full max-w-4xl">
-                  <div className="bg-black/60 backdrop-blur-md p-6 rounded-3xl border border-white/10 text-left">
-                    <h4 className="text-neon-cyan font-black italic uppercase mb-2">Character Library</h4>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase leading-none">Acesso a +50 modelos exclusivos 3D Pixar de alto nível.</p>
-                  </div>
-                  <div className="bg-black/60 backdrop-blur-md p-6 rounded-3xl border border-white/10 text-left">
-                    <h4 className="text-neon-pink font-black italic uppercase mb-2">Prompt Master IA</h4>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase leading-none">Nossa IA gera o roteiro perfeito focado em retenção.</p>
-                  </div>
-                  <div className="bg-black/60 backdrop-blur-md p-6 rounded-3xl border border-white/10 text-left">
-                    <h4 className="text-neon-green font-black italic uppercase mb-2">Viral Score Tool</h4>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase leading-none">Analise o potencial viral antes de postar o vídeo.</p>
-                  </div>
-                  <div className="bg-black/60 backdrop-blur-md p-6 rounded-3xl border border-white/10 text-left">
-                    <h4 className="text-neon-yellow font-black italic uppercase mb-2">Tutorial Expresso</h4>
-                    <p className="text-[10px] font-bold text-gray-400 uppercase leading-none">Do zero ao primeiro vídeo em menos de 5 minutos.</p>
-                  </div>
-                </div>
+            <div className="flex flex-col items-center">
+              <span className="text-gray-400 font-bold uppercase line-through text-lg">De R$ 197,00</span>
+              <span className="text-sm font-black uppercase tracking-widest text-mascot-purple">Por Apenas</span>
+              <div className="text-6xl md:text-8xl font-black text-black tracking-tighter">
+                <span className="text-2xl align-top">R$</span>67
               </div>
+              <span className="bg-green-100 text-green-700 px-4 py-1 rounded-lg font-black uppercase text-xs mt-2">À Vista ou 12x de R$ 6,70</span>
             </div>
           </div>
-        </section>
 
-        {/* 7. THE OFFER BLOCK (HIGH IMPACT) */}
-        <section id="pricing" className="py-20 md:py-40 px-6 relative">
-          <div className="absolute inset-0 bg-[url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=1200')] bg-fixed opacity-10 bg-center bg-cover"></div>
+          <button className="w-full bg-mascot-green text-white border-4 border-black shadow-pop px-4 py-6 rounded-2xl text-xl font-black uppercase tracking-widest hover:scale-105 active:scale-95 transition-all mb-6">
+            Quero Criar Agora
+          </button>
 
-          <div className="max-w-4xl mx-auto relative z-10">
-            <div className="glass-card bg-black/60 border-neon-cyan/30 rounded-[4rem] p-10 md:p-20 flex flex-col items-center text-center space-y-12">
-              <div className="space-y-4">
-                <span className="bg-neon-pink px-6 py-2 rounded-full text-[10px] font-black tracking-widest uppercase italic text-black">OFERTA ÚNICA: HOJE</span>
-                <h2 className="text-4xl md:text-8xl font-black italic uppercase tracking-tighter leading-none">VIRA EX<span className="text-neon-cyan">PRESS</span></h2>
-                <p className="text-gray-400 font-bold uppercase tracking-widest text-xs italic">Acesso Vitalício + Todos os Bônus</p>
-              </div>
-
-              <div className="w-full space-y-4">
-                {[
-                  'Gerador de Imagens Pixar 8K',
-                  'IA Storytelling Pro',
-                  'Fim da Marca d\'água (Pano Pro)',
-                  'Módulo Shopee Lucrativo',
-                  'Suporte VIP via Zap'
-                ].map((item, i) => (
-                  <div key={i} className="flex items-center justify-between border-b border-white/5 pb-4">
-                    <span className="flex items-center gap-4 text-xs font-black uppercase tracking-widest leading-none">
-                      <Check className="text-neon-green w-5 h-5" /> {item}
-                    </span>
-                    <span className="text-neon-green font-black uppercase text-[10px] italic">INCLUSO</span>
-                  </div>
-                ))}
-              </div>
-
-              <div className="pt-10 flex flex-col items-center space-y-4">
-                <p className="text-xl md:text-2xl font-black uppercase tracking-widest opacity-40 italic"><s>POR R$ 497,00</s></p>
-                <div className="flex items-baseline gap-4 scale-110">
-                  <span className="text-xs md:text-2xl font-black uppercase italic tracking-widest text-neon-cyan">POR APENAS 12x</span>
-                  <span className="text-7xl md:text-[10rem] font-black italic tracking-tighter leading-none text-glow">R$ 4,<span className="text-neon-pink">71</span></span>
-                </div>
-                <p className="text-2xl font-black uppercase tracking-widest opacity-60 italic">OU R$ 47,00 À VISTA</p>
-              </div>
-
-              <button className="w-full bg-neon-green text-black py-8 md:py-10 rounded-2xl text-sm md:text-2xl font-black uppercase tracking-[0.3em] shadow-[0_0_50px_rgba(57,255,20,0.4)] transition-all hover:scale-105 active:scale-95 flex items-center justify-center gap-6 group">
-                DESTRAVAR ACESSO AGORA <ArrowRight className="w-8 h-8 group-hover:translate-x-3 transition-transform" />
-              </button>
-
-              <div className="flex flex-wrap items-center justify-center gap-6 opacity-60">
-                <img src="https://logodownload.org/wp-content/uploads/2014/10/cartao-visa-logo-5.png" alt="Visa" className="h-4 brightness-0 invert" />
-                <img src="https://logodownload.org/wp-content/uploads/2014/10/mastercard-logo-2.png" alt="Mastercard" className="h-6 brightness-0 invert" />
-                <img src="https://logodownload.org/wp-content/uploads/2021/04/pix-logo-4.png" alt="PIX" className="h-6 brightness-0 invert" />
-              </div>
-            </div>
+          <div className="flex items-center justify-center gap-2 text-[10px] font-bold text-gray-400 uppercase">
+            <ShieldCheck className="w-4 h-4" /> Compra 100% Segura • Acesso Vitalício
           </div>
-        </section>
+        </div>
 
-        {/* 8. GUARANTEE */}
-        <section className="py-20 md:py-40 text-center space-y-12">
-          <div className="w-48 h-48 md:w-64 md:h-64 mx-auto relative group">
-            <div className="absolute inset-0 bg-neon-cyan/20 blur-3xl animate-pulse group-hover:bg-neon-pink/20 transition-colors"></div>
-            <ShieldCheck className="w-full h-full text-neon-cyan relative z-10 group-hover:text-neon-pink transition-colors" />
+        {/* GARANTIA */}
+        <div className="max-w-2xl mx-auto mt-12 bg-white/10 backdrop-blur-sm p-8 rounded-3xl border-2 border-white/20 flex flex-col md:flex-row items-center gap-6 text-white text-left">
+          <div className="w-20 h-20 bg-mascot-blue rounded-full border-4 border-white flex items-center justify-center text-4xl shadow-pop">
+            🛡️
           </div>
-          <div className="max-w-3xl mx-auto px-6 space-y-6">
-            <h2 className="text-3xl md:text-6xl font-black italic uppercase tracking-tighter italic">RISCO <span className="text-neon-cyan">ZERO</span> PARA VOCÊ</h2>
-            <p className="text-gray-400 text-lg md:text-xl leading-relaxed uppercase font-bold tracking-tight italic">
-              Teste o ViraExpress por 7 dias inteiros. <br />
-              Se você não criar seus primeiros personagens virais ou se arrepender por QUALQUER motivo, devolvemos 100% do seu dinheiro. Sem perguntas.
+          <div>
+            <h3 className="font-black uppercase text-xl mb-2">Garantia de 7 Dias</h3>
+            <p className="font-bold text-sm opacity-90">Se você não criar seu primeiro vídeo viral em 7 dias, eu devolvo 100% do seu dinheiro. Sem risco.</p>
+          </div>
+        </div>
+      </section>
+
+      {/* 9. AUTHOR BIO */}
+      <section className="py-20 px-4 max-w-4xl mx-auto">
+        <div className="flex flex-col md:flex-row items-center gap-10">
+          <div className="w-40 h-40 md:w-56 md:h-56 bg-gray-200 rounded-full border-4 border-black shadow-pop overflow-hidden flex-shrink-0">
+            <img src="https://i.pravatar.cc/300?u=mentor" alt="Mentora" className="w-full h-full object-cover" />
+          </div>
+          <div className="space-y-6 text-center md:text-left">
+            <h2 className="text-3xl font-black uppercase">Quem é sua <span className="text-mascot-blue">Mentora</span></h2>
+            <p className="text-gray-700 font-bold leading-relaxed">
+              Opa, sou eu! 👋 Assim como você, perdi dias tentando configurar IAs complexas. Cansei de erro 404 e criei a <span className="font-black bg-mascot-yellow px-1">Vira Express</span> para automatizar o que era chato.
+              <br /><br />
+              Hoje minha ferramenta gera em <strong>1 minuto</strong> o que levava dias. Meu foco é fazer você faturar, não virar programador.
             </p>
+            <Mascot pose="happy" className="scale-75 origin-left" speech="Ela manja muito!" />
           </div>
-        </section>
+        </div>
+      </section>
 
-        {/* 9. AUTHOR BIO */}
-        <section className="py-20 md:py-40 bg-white/5 border-y border-white/5">
-          <div className="max-w-5xl mx-auto px-6 grid grid-cols-1 md:grid-cols-2 gap-16 items-center">
-            <div className="relative">
-              <div className="glass-card p-2 rounded-full border-neon-cyan/30 overflow-hidden aspect-square">
-                <img src="https://i.pravatar.cc/600?u=expert" className="w-full h-full object-cover rounded-full" alt="Expert" />
-              </div>
-              <div className="absolute -bottom-6 -right-6 bg-neon-cyan text-black px-6 py-4 rounded-2xl font-black italic uppercase tracking-widest transform rotate-6">
-                Expert IA
-              </div>
-            </div>
-            <div className="space-y-8">
-              <h2 className="text-4xl md:text-6xl font-black italic uppercase leading-none italic">QUEM É <br /> <span className="text-neon-cyan">VIRA EXPRESS?</span></h2>
-              <p className="text-gray-400 font-bold uppercase italic leading-relaxed">
-                Somos uma equipe especializada em engenharia de IA e marketing viral. Já ajudamos mais de 5.000 alunos a criarem conteúdo que realmente converte em lucro, sem precisar aparecer. <br /><br />
-                Nossa missão é democratizar a alta produção audiovisual, entregando em 60 segundos o que um editor cobraria R$ 200,00 por vídeo.
-              </p>
-            </div>
+      {/* 10. FOOTER */}
+      <footer className="py-10 bg-black text-white text-center border-t-8 border-mascot-orange">
+        <div className="max-w-4xl mx-auto px-4 space-y-6">
+          <div className="flex justify-center gap-6 font-bold text-xs uppercase tracking-widest text-gray-500">
+            <a href="#" className="hover:text-white">Termos</a>
+            <a href="#" className="hover:text-white">Privacidade</a>
+            <a href="#" className="hover:text-white">Suporte</a>
           </div>
-        </section>
-
-      </main>
-
-      {/* FOOTER */}
-      <footer className="py-12 border-t border-white/5 text-center px-6">
-        <p className="text-[10px] font-black uppercase tracking-[0.4em] text-gray-700">© 2026 ViraExpress • Todos os Direitos Reservados</p>
-        <div className="pt-4 flex justify-center gap-6 text-[9px] font-bold text-gray-800 uppercase tracking-widest">
-          <a href="#" className="hover:text-neon-cyan transition-colors">Aviso Legal</a>
-          <a href="#" className="hover:text-neon-cyan transition-colors">Termos</a>
-          <a href="#" className="hover:text-neon-cyan transition-colors">Contato</a>
+          <p className="text-xs font-bold text-gray-700">© 2026 Vira Express. Todos os direitos reservados.</p>
         </div>
       </footer>
+
     </div>
   );
 };
