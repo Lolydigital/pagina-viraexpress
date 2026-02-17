@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import {
   Check, Play, Users,
-  MessageSquare, TrendingUp, Trophy, ArrowRight,
+  ArrowRight,
   ShieldCheck, ShoppingBag,
-  Scale, Smartphone, Laptop, Target,
+  Laptop, Target,
   Sparkles, Video
 } from 'lucide-react';
 import { motion } from 'framer-motion';
@@ -309,7 +309,7 @@ const App: React.FC = () => {
             <ShieldCheck className="w-full h-full text-neon-cyan relative z-10 group-hover:text-neon-pink transition-colors" />
           </div>
           <div className="max-w-3xl mx-auto px-6 space-y-6">
-            <h2 className="text-3xl md:text-6xl font-black italic uppercase tracking-tighter">RISCO <span className="text-neon-cyan">ZERO</span> PARA VOCÊ</h2>
+            <h2 className="text-3xl md:text-6xl font-black italic uppercase tracking-tighter italic">RISCO <span className="text-neon-cyan">ZERO</span> PARA VOCÊ</h2>
             <p className="text-gray-400 text-lg md:text-xl leading-relaxed uppercase font-bold tracking-tight italic">
               Teste o ViraExpress por 7 dias inteiros. <br />
               Se você não criar seus primeiros personagens virais ou se arrepender por QUALQUER motivo, devolvemos 100% do seu dinheiro. Sem perguntas.
@@ -329,7 +329,7 @@ const App: React.FC = () => {
               </div>
             </div>
             <div className="space-y-8">
-              <h2 className="text-4xl md:text-6xl font-black italic uppercase leading-none">QUEM É <br /> <span className="text-neon-cyan">VIRA EXPRESS?</span></h2>
+              <h2 className="text-4xl md:text-6xl font-black italic uppercase leading-none italic">QUEM É <br /> <span className="text-neon-cyan">VIRA EXPRESS?</span></h2>
               <p className="text-gray-400 font-bold uppercase italic leading-relaxed">
                 Somos uma equipe especializada em engenharia de IA e marketing viral. Já ajudamos mais de 5.000 alunos a criarem conteúdo que realmente converte em lucro, sem precisar aparecer. <br /><br />
                 Nossa missão é democratizar a alta produção audiovisual, entregando em 60 segundos o que um editor cobraria R$ 200,00 por vídeo.
