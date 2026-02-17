@@ -1,17 +1,13 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
-  Check, Play, Users,
-  ArrowRight, ShieldCheck,
-  Target, Sparkles, Video,
+  Check, Play,
+  Target, Video,
   Zap, DollarSign, Brain, Smartphone,
-  Clock, Rocket, MessageCircle, Star,
-  HelpCircle, Copy, Gift
+  Clock, Rocket, ShieldCheck
 } from 'lucide-react';
-import { motion } from 'framer-motion';
 
 // --- MASCOT COMPONENT ---
 // A reusable component for the mascot to "break the fourth wall".
-// Using a placeholder styling that implies a character until user replaces image.
 const Mascot: React.FC<{
   pose?: 'happy' | 'thinking' | 'pointing' | 'cool' | 'shocked';
   className?: string;
@@ -44,8 +40,6 @@ const Mascot: React.FC<{
 };
 
 const App: React.FC = () => {
-  const [activeFaq, setActiveFaq] = useState<number | null>(null);
-
   return (
     <div className="min-h-screen bg-[#FAFAFA] text-black font-sans selection:bg-mascot-yellow selection:text-black overflow-x-hidden">
 
